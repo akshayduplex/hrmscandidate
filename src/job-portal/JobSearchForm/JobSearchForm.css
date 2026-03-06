@@ -1,0 +1,88 @@
+.job-search-container {
+    margin: 20px auto;
+    max-width: 1200px;
+    padding: 0 15px;
+}
+
+.search-form-header {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.search-controls-wrapper {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.input-group {
+    min-width: 250px;
+    flex: 1;
+}
+
+.input-group-no-wrap {
+    flex-wrap: nowrap !important;
+    width: auto !important;
+}
+
+.input-group-no-wrap .form-control {
+    flex: 0 0 auto;
+}
+
+.input-group-text {
+    background-color: #f8f9fa;
+    border-color: #ced4da;
+    color: #495057;
+    font-weight: 500;
+    min-width: 70px;
+    justify-content: center;
+}
+
+.search-input-wrapper {
+    flex: 2;
+    min-width: 300px;
+}
+
+.find-jobs-btn {
+    height: 44px;
+    min-width: 120px;
+    background-color: #1DA1F2 !important;
+    border-color: #1DA1F2 !important;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.find-jobs-btn:hover {
+    background-color: #0d95e8 !important;
+    border-color: #0d95e8 !important;
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .search-controls-wrapper {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .input-group {
+        width: 100%;
+    }
+    
+    .search-input-wrapper {
+        width: 100%;
+    }
+    
+    .find-jobs-btn {
+        width: 100%;
+    }
+}

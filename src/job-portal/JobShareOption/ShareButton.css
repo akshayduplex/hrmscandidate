@@ -1,0 +1,51 @@
+.dropdown-menu-center {
+    text-align: center;
+  }
+  
+  .dropdown-item-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px; /* Space between icon and text */
+  }
+  
+  .dropdown-item-center svg {
+    margin-right: 5px;
+  }
+  .share {
+    margin-left: 0.67rem;
+    background-color: transparent !important; /* Ensure transparency */
+    border: none !important; /* Ensure no border */
+    color: inherit !important; /* Ensure inherited text color */
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .share:hover,
+  .share:focus,
+  .share:active,
+  .show > .share.dropdown-toggle {
+    background-color: #00B957 !important; /* Hover color */
+    color: inherit !important; /* Ensure inherited text color on hover/focus/active */
+  }
+  
+  .share svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+.share:hover svg,
+.share:focus svg,
+.share:active svg,
+.show > .share.dropdown-toggle svg {
+  fill: #fff !important; /* Icon color on hover */
+}
+
+  
+  
+
+
+  
