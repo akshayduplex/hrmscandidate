@@ -27,7 +27,7 @@ const DeclarationForm = ({ candidateData, referenceCandidate }) => {
         applicantName: candidateData?.name || '',
         parentName: candidateData?.applicant_form_data?.father_hushband_name,
         residentOf: candidateData?.applicant_form_data?.permanent_address?.address,
-        position: candidateData?.designation,
+        position: candidateData?.job_title,
         project: candidateData?.project_name,
         date: '',
         place: candidateData?.applied_jobs?.find((item) => item.job_id === candidateData?.job_id)?.proposed_location,

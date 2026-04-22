@@ -8,7 +8,7 @@ import moment from 'moment';
 import config from '../config/Config';
 
 const JoiningReportFormView = ({ candidateData }) => {
-
+console.log(candidateData, 'This is Candidate Data in Joining Report Form View');
     const formRef = useRef();
 
     return (
@@ -231,7 +231,7 @@ const JoiningReportFormView = ({ candidateData }) => {
                                     backgroundColor: '#fafafa'
                                 }}
                             >
-                                {candidateData?.applicant_form_data?.permanent_address?.email_id || ""}
+                                {candidateData?.applicant_form_data?.permanent_address?.address || ""}
                             </Box>
                         </Grid>
 
@@ -343,21 +343,29 @@ const JoiningReportFormView = ({ candidateData }) => {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {candidateData?.applicant_form_data && candidateData?.applicant_form_data?.length > 0 ? candidateData?.applicant_form_data?.family_members.map((row, index) => (
-                                    <TableRow key={index}>
-                                        <TableCell sx={{ border: '1px solid #000' }}>{index + 1}</TableCell>
-                                        <TableCell sx={{ border: '1px solid #000' }}>{row.name}</TableCell>
-                                        <TableCell sx={{ border: '1px solid #000' }}>{row.date_of_birth || "N/A"}</TableCell>
-                                        <TableCell sx={{ border: '1px solid #000' }}>{row.age}</TableCell>
-                                        <TableCell sx={{ border: '1px solid #000' }}>{row.particulars}</TableCell>
-                                        <TableCell sx={{ border: '1px solid #000' }}>{row.occupation}</TableCell>
-                                        <TableCell sx={{ border: '1px solid #000' }}>{row.is_dependent}</TableCell>
-                                    </TableRow>
-                                )) : <TableRow>
-                                    <TableCell colSpan={7} sx={{ border: '1px solid #000' }}>No Records Found</TableCell>
-                                </TableRow>
-                                }
-                            </TableBody>
+    {candidateData?.applicant_form_data?.family_members && 
+     candidateData?.applicant_form_data?.family_members.length > 0 ? (
+        candidateData.applicant_form_data.family_members.map((row, index) => (
+            <TableRow key={index}>
+                <TableCell sx={{ border: '1px solid #000' }}>{index + 1}</TableCell>
+                <TableCell sx={{ border: '1px solid #000' }}>{row.name}</TableCell>
+                <TableCell sx={{ border: '1px solid #000' }}>
+                    {row.date_of_birth ? moment(row.date_of_birth).format('DD/MM/YYYY') : "N/A"}
+                </TableCell>
+                <TableCell sx={{ border: '1px solid #000' }}>{row.age}</TableCell>
+                <TableCell sx={{ border: '1px solid #000' }}>{row.particulars}</TableCell>
+                <TableCell sx={{ border: '1px solid #000' }}>{row.occupation}</TableCell>
+                <TableCell sx={{ border: '1px solid #000' }}>{row.is_dependent}</TableCell>
+            </TableRow>
+        ))
+    ) : (
+        <TableRow>
+            <TableCell colSpan={7} sx={{ border: '1px solid #000', textAlign: 'center' }}>
+                No Family Records Found
+            </TableCell>
+        </TableRow>
+    )}
+</TableBody>
                         </Table>
                     </TableContainer>
 
@@ -443,7 +451,7 @@ const JoiningReportFormView = ({ candidateData }) => {
                                     <TableCell sx={{ border: '1px solid #000' }}>{candidateData?.annexure_eleven_form_data?.previous_organization_details?.previous_org_name || ""}</TableCell>
                                     <TableCell sx={{ border: '1px solid #000' }}>{candidateData?.annexure_eleven_form_data?.previous_organization_details?.previous_designation || ""}</TableCell>
                                     <TableCell sx={{ border: '1px solid #000' }}>{candidateData?.annexure_eleven_form_data?.previous_organization_details?.previous_reporting_mng_name || ""} , {candidateData?.annexure_eleven_form_data?.previous_organization_details?.previous_reporting_mng_designation || ""} , {candidateData?.annexure_eleven_form_data?.previous_organization_details?.previous_reporting_mng_email || ""} , {candidateData?.annexure_eleven_form_data?.previous_organization_details?.previous_reporting_mng_mobile_no || ""} </TableCell>
-                                    <TableCell sx={{ border: '1px solid #000' }}>{candidateData?.annexure_eleven_form_data?.previous_organization_details?.previous_from || ""} to {candidateData?.annexure_eleven_form_data?.previous_organization_details?.previous_to || ""}</TableCell>
+                                    <TableCell sx={{ border: '1px solid #000' }}>{candidateData?.annexure_eleven_form_data?.previous_organization_details?.previous_from || ""} to {candidateData?.annexure_eleven_form_data?.previous_organization_details?.previous_to || "Till now"}</TableCell>
                                 </TableRow>
                             </TableBody>
                         </Table>

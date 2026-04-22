@@ -1,4 +1,4 @@
-// import logo from '../images/logo.png';
+import logo from '../images/logo.png';
 
 // import axios from "axios";
 let config = {}
@@ -15,9 +15,9 @@ let config = {}
 // config['duplex_build']='yes';
 
 
-// Live
-// config['BASE_URL'] = 'https://hrmsapis.dtsmis.in/v1';
-// config['API_URL'] = 'https://hrmsapis.dtsmis.in/v1/admin/';
+
+config['BASE_URL'] = 'https://hrmsapis.dtsmis.in/v1';
+config['API_URL'] = 'https://hrmsapis.dtsmis.in/v1/admin/';
 let IS_S3_ENABLED = 'NO';
 
 config['BASE_URL'] = 'http://localhost:8080/v1';
@@ -39,7 +39,7 @@ config['duplex_build'] = 'no';
 // config['API_TOKEN'] = 'Bearer 744b365cde7bd714a928d5a04167a117';
 // config['duplex_build'] = 'no';
 
-// // config['LOGO_PATH'] = logo;
+config['LOGO_PATH'] = logo;
 config['COMPANY_NAME'] = 'HRMS WEB APP';  
 config['PANEL_NAME'] = 'HRMS Login';
 config['HELP_URL'] = 'support';

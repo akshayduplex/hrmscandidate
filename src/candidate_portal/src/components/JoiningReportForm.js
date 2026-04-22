@@ -19,7 +19,7 @@ const JoiningReportForm = ({ candidateData, referenceCandidate }) => {
     const [familyMembers, setFamilyMembers] = useState([
         { id: 1, name: '', dateOfBirth: '', age: '', relationship: '', occupation: '', dependent: false },
     ]);
-
+    const [isTillNow, setIsTillNow] = useState(false);
     const appliedJobDetails = useMemo(() => {
 
         return candidateData?.applied_jobs?.find((item) => item?.job_id === candidateData?.job_id)
@@ -32,6 +32,16 @@ const JoiningReportForm = ({ candidateData, referenceCandidate }) => {
 
     }, [candidateData])
 
+    const handleTillNowChange = (e) => {
+        const checked = e.target.checked;
+        setIsTillNow(checked);
+    
+        if (checked) {
+            formik.setFieldValue('previousTenureTo', '');
+        } else {
+            formik.setFieldValue('previousTenureTo', '');
+        }
+    };
     useEffect(() => {
         if (candidateData?.applicant_form_data &&
             Array.isArray(candidateData?.applicant_form_data?.family_members) &&
@@ -57,8 +67,6 @@ const JoiningReportForm = ({ candidateData, referenceCandidate }) => {
 
     const validationSchema = Yup.object({
         name: Yup.string().required('Full name is required'),
-        dateOfJoining: Yup.string().trim(),
-        dateOfBirth: Yup.string().trim(),
         fatherName: Yup.string().required("Father's name is required"),
         placeOfPosting: Yup.string().required('Place of posting is required'),
         addressCommunication: Yup.string().required('Communication address is required'),
@@ -68,56 +76,28 @@ const JoiningReportForm = ({ candidateData, referenceCandidate }) => {
         sex: Yup.string().required('Gender is required'),
         maritalStatus: Yup.string().required('Marital status is required'),
         bloodGroup: Yup.string().required('Blood group is required'),
-        panNo: Yup.string().required('PAN number is required').matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}/, 'Invalid PAN format'),
+        panNo: Yup.string().required('PAN number is required')
+            .matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}/, 'Invalid PAN format'),
+    
         emergencyContactLocalName: Yup.string().required('Local emergency contact name is required'),
         emergencyContactLocalContact: Yup.string().required('Local emergency contact number is required'),
         emergencyContactLocalAddress: Yup.string().required('Local emergency contact address is required'),
-        emergencyContactPermanentAddress: Yup.string().required('Local emergency contact address is required'),
         emergencyContactPermanentName: Yup.string().required('Permanent emergency contact name is required'),
         emergencyContactPermanentContact: Yup.string().required('Permanent emergency contact number is required'),
+        emergencyContactPermanentAddress: Yup.string().required('Permanent emergency contact address is required'),
+    
         bankName: Yup.string().required('Bank name is required'),
         branchIFSC: Yup.string().required('Branch & IFSC Code is required'),
         accountNo: Yup.string().required('Account number is required'),
-
-        // Make all previous employee fields optional
-        previousOrganization: Yup.string().optional().nullable().trim(),
-        previousDesignation: Yup.string().optional().nullable().trim(),
-        previousReportingManagerName: Yup.string().optional().nullable(),
-        previousReportingManagerDesignation: Yup.string().optional().nullable(),
-        previousReportingManagerEmail: Yup.string()
-            .optional()
-            .nullable()
-            .email('Please enter a valid email address')
-            .matches(
-                /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
-                'Please enter a valid email address'
-            ),
-        permanentContactEmail: Yup.string()
-            .optional()
-            .nullable()
-            .email('Please enter a valid email address')
-            .matches(
-                /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/,
-                'Please enter a valid email address'
-            ),
-        previousReportingManagerMob: Yup.string()
-            .optional()
-            .nullable()
-            .matches(
-                /^[6-9]\d{9}$/,
-                'Please enter a valid 10-digit mobile number'
-            )
-            .test('valid-mobile', 'Mobile number must be 10 digits', value => {
-                if (!value) return true;
-                const digits = value.replace(/\D/g, '');
-                return digits.length === 10;
-            }),
+    
+        // Previous Employment - All optional
         previousTenureFrom: Yup.string()
             .optional()
             .nullable()
             .test('valid-date', 'Invalid date format', value =>
                 !value || moment(value, 'YYYY-MM-DD', true).isValid()
             ),
+    
         previousTenureTo: Yup.string()
             .optional()
             .nullable()
@@ -125,24 +105,9 @@ const JoiningReportForm = ({ candidateData, referenceCandidate }) => {
                 !value || moment(value, 'YYYY-MM-DD', true).isValid()
             )
             .test('is-greater', 'To date must be greater than From date', function (value) {
-                const { previousTenureFrom } = this.parent;
-                if (!previousTenureFrom || !value) return true; // Skip validation if either date is empty
-
-                const fromDate = moment(previousTenureFrom);
-                const toDate = moment(value);
-                return toDate.isAfter(fromDate);
-            }),
-        pfAccountNo: Yup.string().optional().nullable().trim(),
-        uan: Yup.string().optional().nullable().trim(),
-        cancelCheque: Yup.mixed()
-            .test('fileSize', 'File size is too large', (value) => {
-                if (!value) return true; // Not required
-                return value.size <= 5 * 1024 * 1024;
-            })
-            .test('fileType', 'Unsupported file format', (value) => {
-                if (!value) return true;
-                const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png'];
-                return validTypes.includes(value.type);
+                const from = this.parent.previousTenureFrom;
+                if (!from || !value || isTillNow) return true; // Skip date comparison if "Till Now"
+                return moment(value).isAfter(moment(from));
             }),
     });
 
@@ -292,6 +257,10 @@ const JoiningReportForm = ({ candidateData, referenceCandidate }) => {
             // formData.append('added_by', JSON.stringify(added_by))
 
             try {
+                for (let pair of formData.entries()) {
+                    console.log(pair[0], pair[1]);
+                  }
+                  
                 let response = await axios.post(`${config.API_URL}saveAnnexureElevenForm`, formData, apiHeaderTokenMultiPart())
                 if (response.status === 200) {
                     toast.success(response.data?.message)
@@ -356,7 +325,13 @@ const JoiningReportForm = ({ candidateData, referenceCandidate }) => {
         newFamilyMembers[index].dependent = e.target.checked;
         setFamilyMembers(newFamilyMembers);
     };
-
+    useEffect(() => {
+        const toDate = formik.values.previousTenureTo;
+        if (!toDate || moment(toDate).isSame(moment(), 'day')) {
+            setIsTillNow(true);
+            formik.setFieldValue('previousTenureTo', '');
+        }
+    }, []);
     return (
         <>
             <Container maxWidth="md" sx={{ py: 4, fontFamily: 'Arial, sans-serif' }}>
@@ -803,9 +778,12 @@ const JoiningReportForm = ({ candidateData, referenceCandidate }) => {
                                                     type="date"
                                                     sx={{ width: 140 }}
                                                     value={member.dateOfBirth || ''}
+                                                    // inputProps={{
+                                                    //     max: moment().subtract(15, 'years').format('YYYY-MM-DD')
+                                                    // }}
                                                     inputProps={{
-                                                        max: moment().subtract(15, 'years').format('YYYY-MM-DD')
-                                                    }}
+                                                        max: moment().format('YYYY-MM-DD')
+                                                      }}                                                      
                                                     InputLabelProps={{ shrink: true }}
                                                     onChange={handleDateChange(index)}
                                                 />
@@ -1007,7 +985,7 @@ const JoiningReportForm = ({ candidateData, referenceCandidate }) => {
                             <Grid item xs={12}>
                                 <Grid item xs={12}>
                                     <input
-                                        accept=".jpeg , png ,image/*"
+                                       accept=".jpeg,.jpg,.png,.pdf,.doc,.docx,image/*"
                                         type="file"
                                         id="cancelCheque"
                                         name="cancelCheque"
@@ -1140,35 +1118,47 @@ const JoiningReportForm = ({ candidateData, referenceCandidate }) => {
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    id="previousTenureFrom"
-                                    name="previousTenureFrom"
-                                    type='date'
-                                    label="Tenure From"
-                                    value={formik.values.previousTenureFrom}
-                                    InputLabelProps={{ shrink: true }}
-                                    size='small'
-                                    onChange={formik.handleChange}
-                                    error={formik.touched.previousTenureFrom && Boolean(formik.errors.previousTenureFrom)}
-                                    helperText={formik.touched.previousTenureFrom && formik.errors.previousTenureFrom}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    id="previousTenureTo"
-                                    type='date'
-                                    name="previousTenureTo"
-                                    label="Tenure To ..........."
-                                    value={formik.values.previousTenureTo}
-                                    InputLabelProps={{ shrink: true }}
-                                    size='small'
-                                    onChange={formik.handleChange}
-                                    error={formik.touched.previousTenureTo && Boolean(formik.errors.previousTenureTo)}
-                                    helperText={formik.touched.previousTenureTo && formik.errors.previousTenureTo}
-                                />
-                            </Grid>
+                    <TextField
+                        fullWidth
+                        id="previousTenureFrom"
+                        name="previousTenureFrom"
+                        type='date'
+                        label="Tenure From"
+                        value={formik.values.previousTenureFrom}
+                        InputLabelProps={{ shrink: true }}
+                        size='small'
+                        onChange={formik.handleChange}
+                        error={formik.touched.previousTenureFrom && Boolean(formik.errors.previousTenureFrom)}
+                        helperText={formik.touched.previousTenureFrom && formik.errors.previousTenureFrom}
+                    />
+                </Grid>
+
+<Grid item xs={12} sm={6}>
+<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+    <TextField
+        fullWidth
+        id="previousTenureTo"
+        type='date'
+        name="previousTenureTo"
+        label="Tenure To"
+        value={formik.values.previousTenureTo}
+        InputLabelProps={{ shrink: true }}
+        size='small'
+        onChange={formik.handleChange}
+        disabled={isTillNow}                    // Disable input when "Till Now" is checked
+        error={formik.touched.previousTenureTo && Boolean(formik.errors.previousTenureTo)}
+        helperText={formik.touched.previousTenureTo && formik.errors.previousTenureTo}
+    />
+    <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 100 }}>
+        <Checkbox
+            checked={isTillNow}
+            onChange={handleTillNowChange}
+            color="primary"
+        />
+        <Typography variant="body2" sx={{ ml: 0.5 }}>Till Now</Typography>
+    </Box>
+</Box>
+</Grid>  
                             <Grid item xs={12}>
                                 <TextField
                                     fullWidth

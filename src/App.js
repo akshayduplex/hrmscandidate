@@ -27,6 +27,7 @@ import PrivacyPolicy from "./job-portal/PrivacyPolicyPage/PrivacyOrPolicy";
 import VerifiedDocument from "./candidate_portal/src/components/VerifyDocument";
 import ApplicationForm from "./candidate_portal/src/components/BlankApplicationForm/BlackApplicationForm";
 import CandidatePanel from "./candidate_portal/src/components/CandidatePanel";
+import JoiningKit from "./candidate_portal/src/components/JoiningKit";
 // import ReferenceCheckForm from "./job-portal/ReferalApproval/ReferealApprovalForm";
 
 
@@ -53,7 +54,7 @@ const Layout = ({ children }) => {
 // make Dynamic Footer Data 
 const Footer = () => {
   const location = useLocation();
-  const noFooterRoutes = ["/login", '/dashboard', '/candidate_panel', '/assessment', '/verify', '/referenceCheck', '/know-organization', '/assessment-score', '/profile', '/upload-documents', '/your-document', '/approval-documents', '/application-form'];
+  const noFooterRoutes = ["/login", '/dashboard', '/joining-kit', '/candidate_panel', '/assessment', '/verify', '/referenceCheck', '/know-organization', '/assessment-score', '/profile', '/upload-documents', '/your-document', '/approval-documents', '/application-form'];
 
   return !noFooterRoutes.includes(location.pathname) && <JobFooter />
 }
@@ -106,6 +107,7 @@ function App() {
             {/* <Route exact path='/referenceCheck' element={<ReferenceCheckForm />} /> */}
             {/* <Route exact path='/dashboard' element={<ProtectedRoute><Welcome /></ProtectedRoute>} /> */}
             <Route exact path='/dashboard' element={<ProtectedRoute><CandidatePanel /></ProtectedRoute>} />
+            <Route exact path='/joining-kit' element={<ProtectedRoute><JoiningKit /></ProtectedRoute>} />
             <Route exact path='/know-organization' element={<ProtectedRoute><Knowhlfppt /></ProtectedRoute>} />
             <Route exact path='/assessment' element={<ProtectedRoute><Assessment /></ProtectedRoute>} />
             <Route exact path='/assessment-score' element={<ProtectedRoute><AssessmentScore /></ProtectedRoute>} />

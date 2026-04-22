@@ -134,4 +134,4 @@ const imgUrl = (name) => {
   return config.IMAGE_PATH + name;
 };
 
-export { imgUrl, formatDateWithSuffix,apiHeaderToken, apiHeaderTokenMultiPart, setSessiontData, getSessionData, clearSessionData, getCandidateId, formatDate, lettersOnly, numbersOnly };
+export { imgUrl, formatDateWithSuffix,getToken,apiHeaderToken, apiHeaderTokenMultiPart, setSessiontData, getSessionData, clearSessionData, getCandidateId, formatDate, lettersOnly, numbersOnly };

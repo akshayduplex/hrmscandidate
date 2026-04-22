@@ -1,6 +1,6 @@
+import logo from '../images/logo.png';
 // import axios from "axios";
 let config = {}; // Initialize as an empty object
-
 // config['BASE_URL'] = 'https://hrmsapis.dtsmis.in/';
 // config['API_URL'] = 'https://hrmsapis.dtsmis.in/v1/candidate/';
 // config['GLOB_API_URL'] = 'https://hrmsapis.dtsmis.in/v1/global/';
@@ -19,11 +19,11 @@ config['IMAGE_PATH'] = IS_S3_ENABLED === 'YES'
 config['IMAGE_PATH_EMP'] = IS_S3_ENABLED === 'YES'
     ? 'https://e-sangrah-test.s3.eu-north-1.amazonaws.com/emp_uploads/'
     : 'http://localhost:8080/public/emp_uploads/';
-// // config['IMAGE_PATH'] = 'https://hrmsapis.dtsmis.in/public/uploads/';
-// config['FRONT_URL'] = 'https://jobs.hlfppt.org/';
+// config['IMAGE_PATH'] = 'https://hrmsapis.dtsmis.in/public/uploads/';
+config['FRONT_URL'] = 'https://jobs.hlfppt.org/';
+config['GLOB_API_URL'] = 'https://api-hrms.dtsmis.in:3008/v1/global/';
 // config['GLOB_API_URL'] = 'https://api-hrms.dtsmis.in:3008/v1/global/';
-// // config['GLOB_API_URL'] = 'https://api-hrms.dtsmis.in:3008/v1/global/';
-// config['API_TOKEN'] = 'Bearer 744b365cde7bd714a928d5a04167a117';
+config['API_TOKEN'] = 'Bearer 744b365cde7bd714a928d5a04167a117';
 
 
 // config['BASE_URL'] = 'https://hrapi.duplextech.com/v1';
@@ -44,7 +44,7 @@ config['IMAGE_PATH_EMP'] = IS_S3_ENABLED === 'YES'
 // config['FRONT_URL'] = 'https://jobs.hlfppt.org/';
 
 
-// // config['LOGO_PATH'] = logo;
+config['LOGO_PATH'] = logo;
 config['COMPANY_NAME'] = 'HRMS WEB APP';  
 config['PANEL_NAME'] = 'HRMS Login';
 config['HELP_URL'] = 'support';

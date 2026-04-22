@@ -17,17 +17,17 @@ import { useSelector } from "react-redux";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import JoiningReportFormView from "./AnnuxureElevenJoiningFormView";
 import DeclarationForm from "./DeclarationForm";
-
+import { useLocation } from 'react-router-dom';
 const actionButtons = [
     { icon: <FaEye />, label: 'View', onClickKey: 'onView', color: '#1E88E5' },
     { icon: <FaDownload />, label: 'Download', onClickKey: 'onDownload', color: '#1E88E5' },
     { icon: <FaUpload />, label: 'Upload', onClickKey: 'onUpload', color: '#43A047' },
 ];
 
-const DocumentTabs = ({ documents, handlers, candidateData, eventKeySteps, referenceCandidate }) => {
-    const [value, setValue] = useState(0);
+const DocumentTabs = ({ documents, handlers, candidateData, eventKeySteps, referenceCandidate ,initialTabValue = 0,onTabChange}) => {
+    // const [value, setValue] = useState(0);
     const webSetting = useSelector(state => state.jobs.webSettingData);
-
+    const [value, setValue] = useState(initialTabValue);
     const [formData, setFormData] = useState({
         inductiveJoiningDate: '',
         loading: ''
@@ -35,7 +35,10 @@ const DocumentTabs = ({ documents, handlers, candidateData, eventKeySteps, refer
 
     const jsonData = sessionStorage.getItem('loginData');
     const dataObject = jsonData ? JSON.parse(jsonData) : null;
-
+console.log("candiate data", candidateData)
+    useEffect(() => {
+        setValue(initialTabValue);
+    }, [initialTabValue]);
 
     const MakeFinalUploadsJoiningKits = async () => {
 
@@ -90,11 +93,10 @@ const DocumentTabs = ({ documents, handlers, candidateData, eventKeySteps, refer
             ...obj
         }));
     };
-
     const handleChange = (event, newValue) => {
         setValue(newValue);
+        onTabChange?.(newValue);   // optional — if parent wants to know
     };
-
     const handleApprovedOrReject = async (status) => {
         try {
 
@@ -278,11 +280,11 @@ const DocumentTabs = ({ documents, handlers, candidateData, eventKeySteps, refer
             <Box sx={{ width: '100%', height: '100%' }}>
 
                 <Tabs
+                value={value}
+                onChange={handleChange}
                     orientation="horizontal"
                     variant="scrollable"
                     scrollButtons="auto"
-                    value={value}
-                    onChange={handleChange}
                     sx={{
                         borderBottom: 1,
                         borderColor: "divider",
@@ -521,7 +523,9 @@ const VerifiedDocument = () => {
     const jsonData = sessionStorage.getItem('loginData');
     const dataObject = jsonData ? JSON.parse(jsonData) : null;
     const [candidateData, setCandidateData] = useState(null);
-
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const selectedDocName = queryParams.get('doc_name');   // e.g. "SB_FORMAT"
     const GetCandidateUploadsDocument = useCallback(async () => {
         try {
 
@@ -541,6 +545,50 @@ const VerifiedDocument = () => {
             setDocuments(null);
         }
     }, [dataObject?._id]);
+    // ────────────────────────────────────────────────
+    // New logic: compute initial tab index based on doc_name
+    // ────────────────────────────────────────────────
+    const getInitialTabValue = () => {
+        if (!documents || !selectedDocName) return 0;
+
+        // For joiningkit stage — most likely what you want
+        if (documents.onboarding_docs_stage === 'joiningkit' || documents.onboarding_docs_stage === 'complete') {
+            const allDocs = documents.onboarding_docs?.filter(
+                item => item?.doc_category === 'Joining Kit'
+            ) || [];
+
+            // We use the same filtered + ordered list as in DocumentTabs
+            const htmlDocs = allDocs.filter(doc => doc.is_html === 'Yes');
+            const pdfDocs = allDocs.filter(doc => doc.is_html === 'No');
+
+            let orderedDocs = [];
+            if (htmlDocs.length >= 1) orderedDocs.push(htmlDocs[0]);
+            if (htmlDocs.length >= 2) orderedDocs.push(htmlDocs[1]);
+            orderedDocs.push(...pdfDocs);
+
+            const targetIndex = orderedDocs.findIndex(
+                doc => doc.doc_name?.trim().toUpperCase() === selectedDocName.trim().toUpperCase()
+            );
+
+            if (targetIndex !== -1) {
+                return targetIndex;
+            }
+        }
+
+        // Fallback — first tab
+        return 0;
+    };
+
+    // Use it only when documents are loaded
+    const [value, setValue] = useState(0);
+
+    useEffect(() => {
+        if (documents) {
+            const initial = getInitialTabValue();
+            setValue(initial);
+        }
+    }, [documents, selectedDocName]);
+
 
     const GetCandidateRecordsBaseOnEvent = async (id = '') => {
         const response = await getCandidateById({ _id: id, scope_fields: [] });
@@ -729,7 +777,8 @@ const VerifiedDocument = () => {
 
                                 <Paper elevation={3} sx={{ p: 3, mt: 2 }}>
                                     {steps.length > 0 && steps[activeStep] ? (
-                                        <DocumentTabs documents={steps[activeStep]?.docs} handlers={handlers} candidateData={candidateData} eventKeySteps={steps[activeStep]?.eventKey} referenceCandidate={GetCandidateRecordsBaseOnEvent} />
+                                        <DocumentTabs documents={steps[activeStep]?.docs} handlers={handlers} candidateData={candidateData} eventKeySteps={steps[activeStep]?.eventKey} referenceCandidate={GetCandidateRecordsBaseOnEvent} initialTabValue={value}
+                                        onTabChange={setValue}/>
                                     ) : (
                                         <Typography textAlign={'center'}>No Action available.</Typography>
                                     )}

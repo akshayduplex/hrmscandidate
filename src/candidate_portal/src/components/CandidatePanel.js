@@ -104,6 +104,7 @@ const CandidatePanel = () => {
                 <Grid container spacing={3}>
                     {/* Standard Pages */}
                     <DashboardCard title="Application Form" icon={DescriptionIcon} path="/application-form" />
+                    <DashboardCard title="Uploded Documents" icon={DescriptionIcon} path="/your-document" />
                     <DashboardCard title="KYC Documents" icon={AccountCircleIcon} path="/upload-documents?doc=kyc" />
                     <DashboardCard title="Education Documents" icon={SchoolIcon} path="/upload-documents?doc=education" />
                     <DashboardCard title="Experience Documents" icon={WorkIcon} path="/upload-documents?doc=experience" />
@@ -118,7 +119,7 @@ const CandidatePanel = () => {
                     <DashboardCard
                         title="Joining Kit"
                         icon={DescriptionIcon}
-                        path="/approval-documents?status=joiningkit"
+                        path="/joining-kit"
                         isLocked={!canViewJoiningKit}
                     />
                 </Grid>

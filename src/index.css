@@ -263,10 +263,10 @@ aside span.ps-menu-icon svg {
 
 }
 
-.maincontent{
+/* .maincontent{
   width: calc(100% - 280px);
   margin-left: 280px;
-}
+} */
 
 .ps-collapsed + .tophdr {
   margin-left: 80px;
@@ -1675,10 +1675,10 @@ aside span.ps-menu-icon svg {
 
 }
 
-.maincontent{
+/* .maincontent{
   width: calc(100% - 280px);
   margin-left: 280px;
-}
+} */
 
 .ps-collapsed + .tophdr {
   margin-left: 80px;

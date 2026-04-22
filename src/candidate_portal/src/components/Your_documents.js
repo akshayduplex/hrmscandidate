@@ -42,7 +42,8 @@ const Your_document = () => {
 
             const experienceDefaults = [
                 { doc_name: "Experience Letter", mime_type: "N/A", file_size: "N/A", add_date: null, file_name: "", doc_category: "Experience", sub_doc_category: 'Letter', status: "" },
-                { doc_name: "Relieving Letter", mime_type: "N/A", file_size: "N/A", add_date: null, file_name: "", doc_category: "Experience", sub_doc_category: 'Letter', status: "" },
+                { doc_name: "Bank Statement", mime_type: "N/A", file_size: "N/A", add_date: null, file_name: "", doc_category: "Experience", sub_doc_category: 'Letter', status: "" },
+                { doc_name: "Bank Details", mime_type: "N/A", file_size: "N/A", add_date: null, file_name: "", doc_category: "Experience", sub_doc_category: 'Letter', status: "" },
                 { doc_name: "Salary Slip", mime_type: "N/A", file_size: "N/A", add_date: null, file_name: "", doc_category: "Experience", sub_doc_category: 'Letter', status: "" },
             ];
 

@@ -90,6 +90,7 @@ const ApplicationForm = () => {
         from_date: Yup.date(),
         to_date: Yup.date()
             .min(Yup.ref('from_date'), 'End date cannot be before start date'),
+        currently_working: Yup.boolean(),
         reason_for_leaving: Yup.string(),
         organization_hr_contact_details: Yup.string()
             .email('Invalid email'),
@@ -605,6 +606,7 @@ const ApplicationForm = () => {
                 last_ctc: '',
                 from_date: '',
                 to_date: '',
+                currently_working: false,
                 reason_for_leaving: '',
                 organization_hr_contact_details: '',
                 reporting_contact_number_name: '',
@@ -825,7 +827,8 @@ const ApplicationForm = () => {
                 "nature_of_work": item.role_and_responsibility,
                 "ctc": item.last_ctc,
                 "duration_from": item.from_date,
-                "duration_to": item.to_date,
+                "duration_to": item.currently_working ? "Till Now" : item.to_date,
+                "currently_working": item.currently_working ? "yes" : "no",
                 "organization_email": item.organization_hr_contact_details,
                 "reporting_person_email": item.reporting_contact_number_name,
                 "reporting_person_mobile": item.reason_for_leaving
@@ -2363,41 +2366,69 @@ const ApplicationForm = () => {
                                                                                                 </TableCell>
 
                                                                                                 {/* Duration */}
-                                                                                                <TableCell>
-                                                                                                    <Grid container spacing={1}>
-                                                                                                        <Grid item xs={6}>
-                                                                                                            <Field
-                                                                                                                name={`employment_history.${index}.from_date`}
-                                                                                                                type="date"
-                                                                                                                as={TextField}
-                                                                                                                fullWidth
-                                                                                                                variant="outlined"
-                                                                                                                size="small"
-                                                                                                                InputLabelProps={{ shrink: true }}
-                                                                                                                label="From"
-                                                                                                                error={empTouched.from_date && !!empErrors.from_date}
-                                                                                                            />
-                                                                                                        </Grid>
-                                                                                                        <Grid item xs={6}>
-                                                                                                            <Field
-                                                                                                                name={`employment_history.${index}.to_date`}
-                                                                                                                type="date"
-                                                                                                                as={TextField}
-                                                                                                                fullWidth
-                                                                                                                variant="outlined"
-                                                                                                                size="small"
-                                                                                                                InputLabelProps={{ shrink: true }}
-                                                                                                                label="To"
-                                                                                                                error={empTouched.to_date && !!empErrors.to_date}
-                                                                                                            />
-                                                                                                        </Grid>
-                                                                                                    </Grid>
-                                                                                                    <ErrorMessage
-                                                                                                        name={`employment_history.${index}.to_date`}
-                                                                                                        component={FormHelperText}
-                                                                                                        error
-                                                                                                    />
-                                                                                                </TableCell>
+<TableCell>
+    <Grid container spacing={1} alignItems="center">
+        <Grid item xs={5.5}>
+            <Field
+                name={`employment_history.${index}.from_date`}
+                type="date"
+                as={TextField}
+                fullWidth
+                variant="outlined"
+                size="small"
+                InputLabelProps={{ shrink: true }}
+                label="From"
+                error={empTouched.from_date && !!empErrors.from_date}
+            />
+        </Grid>
+
+        <Grid item xs={5.5}>
+            <Field
+                name={`employment_history.${index}.to_date`}
+                type="date"
+                as={TextField}
+                fullWidth
+                variant="outlined"
+                size="small"
+                InputLabelProps={{ shrink: true }}
+                label="To"
+                disabled={values.employment_history[index].currently_working}
+                error={empTouched.to_date && !!empErrors.to_date}
+            />
+        </Grid>
+
+        <Grid  item xs="auto">
+            <Field name={`employment_history.${index}.currently_working`}>
+                {({ field }) => (
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                {...field}
+                                checked={field.value || false}
+                                onChange={(e) => {
+                                    setFieldValue(`employment_history.${index}.currently_working`, e.target.checked);
+                                    if (e.target.checked) {
+                                        setFieldValue(`employment_history.${index}.to_date`, ''); // Clear To date
+                                        setFieldValue(`employment_history.${index}.reason_for_leaving`, ''); // Optional: clear reason
+                                    }
+                                }}
+                                size="small"
+                            />
+                        }
+                        label="Till Now"
+                        sx={{ m: 0 ,whiteSpace: "nowrap"}}
+                    />
+                )}
+            </Field>
+        </Grid>
+    </Grid>
+
+    <ErrorMessage
+        name={`employment_history.${index}.to_date`}
+        component={FormHelperText}
+        error
+    />
+</TableCell>
 
                                                                                                 {/* Reason of leaving */}
                                                                                                 <TableCell>
