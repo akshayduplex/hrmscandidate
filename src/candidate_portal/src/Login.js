@@ -64,7 +64,7 @@ const Login = () => {
             setFlashMessage({ text: '', type: '' });
           }, 5000);
         } else {
-          setFlashMessage({ text: "An error occurred, please try again.", type: 'error' });
+          setFlashMessage({ text: "Please check your internet connection and try again", type: 'error' });
           setShowFlash(true);setIsSubmitting(false);
           setTimeout(() => {
             setShowFlash(false);
@@ -72,7 +72,7 @@ const Login = () => {
           }, 5000);
         }
       } catch (e) {
-        setFlashMessage({ text: "An error occurred, please try again.", type: 'error' });
+        setFlashMessage({ text: "Please check your internet connection and try again", type: 'error' });
         setShowFlash(true);
         setTimeout(() => {
           setShowFlash(false);

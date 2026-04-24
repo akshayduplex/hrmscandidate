@@ -104,9 +104,9 @@ const CandidatePanel = () => {
                 <Grid container spacing={3}>
                     {/* Standard Pages */}
                     <DashboardCard title="Application Form" icon={DescriptionIcon} path="/application-form" />
-                    <DashboardCard title="Uploded Documents" icon={DescriptionIcon} path="/your-document" />
                     <DashboardCard title="KYC Documents" icon={AccountCircleIcon} path="/upload-documents?doc=kyc" />
-                    <DashboardCard title="Education Documents" icon={SchoolIcon} path="/upload-documents?doc=education" />
+                    <DashboardCard title="Educational Certificates" icon={SchoolIcon} path="/upload-documents?doc=education_certificates" />
+                    <DashboardCard title="Skill Certificates" icon={SchoolIcon} path="/upload-documents?doc=skill_certificates" />
                     <DashboardCard title="Experience Documents" icon={WorkIcon} path="/upload-documents?doc=experience" />
 
                     {/* Restricted Pages  */}

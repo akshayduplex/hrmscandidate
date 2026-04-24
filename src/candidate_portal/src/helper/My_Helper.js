@@ -55,6 +55,20 @@ const getToken = () => {
 };
 
 
+const deleteKycDoc = async (docId, candidateId) => {
+  try {
+    const response = await fetch(`${config.API_URL}/KycDocs/${docId}`, {
+      method: "DELETE",
+      ...apiHeaderToken(), // ✅ reuse your token logic
+      body: JSON.stringify({ candidateId }),
+    });
+
+    return await response.json();
+  } catch (error) {
+    console.error("Delete API error:", error);
+    return { status: false, message: "Delete failed" };
+  }
+};
 
 const getCandidateId = () => {
   try {
@@ -134,4 +148,4 @@ const imgUrl = (name) => {
   return config.IMAGE_PATH + name;
 };
 
-export { imgUrl, formatDateWithSuffix,getToken,apiHeaderToken, apiHeaderTokenMultiPart, setSessiontData, getSessionData, clearSessionData, getCandidateId, formatDate, lettersOnly, numbersOnly };
+export { imgUrl,deleteKycDoc,formatDateWithSuffix,getToken,apiHeaderToken, apiHeaderTokenMultiPart, setSessiontData, getSessionData, clearSessionData, getCandidateId, formatDate, lettersOnly, numbersOnly };

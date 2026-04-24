@@ -5,7 +5,7 @@ import { clearSessionData } from "../helper/My_Helper";
 import { useNavigate } from "react-router-dom";
 import config from "../config/Config";
 import { Link } from 'react-router-dom';
-import { useSelector } from "react-redux";
+import { useSelector } from "react-redux"; 
 function Dash_nav() {
 
     const navigate = useNavigate();
@@ -25,12 +25,15 @@ function Dash_nav() {
     console.log("websetting", webSetting)
     return (
         <>
-          <div className="wd80 pt-2 d-flex justify-content-between align-items-center">
+          <div className="w-100 pt-2 d-flex justify-content-between align-items-center" style={{borderBottom:"1px solid #cccccc", paddingBottom:"20px"}}>
     
     {/* LEFT: Logo */}
-    <div className="dashlogo">
+    <div className="dashlogo" style={{ paddingLeft: "10px" }}>
         <Link to="/dashboard">
-            {user &&  <img src={user} alt="HRMS"/> || <img src={config.IMAGE_PATH + logo} alt="HRMS" />}
+        {user &&  <img src={user} alt="HRMS"/> || <img src={config.IMAGE_PATH + logo} alt="HRMS" />}
+        </Link>
+        <Link to="/dashboard">
+            <strong style={{paddingLeft:"60px"}}>Dashboard</strong>
         </Link>
     </div>
 

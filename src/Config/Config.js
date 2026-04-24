@@ -16,8 +16,10 @@ let config = {}
 
 
 
-config['BASE_URL'] = 'https://hrmsapis.dtsmis.in/v1';
-config['API_URL'] = 'https://hrmsapis.dtsmis.in/v1/admin/';
+// config['BASE_URL'] = 'https://hrmsapis.dtsmis.in/v1';
+// config['API_URL'] = 'https://hrmsapis.dtsmis.in/v1/admin/';
+
+
 let IS_S3_ENABLED = 'NO';
 
 config['BASE_URL'] = 'http://localhost:8080/v1';
